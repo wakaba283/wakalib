@@ -1,0 +1,9 @@
+{
+    "application/vnd.ms-excel": "excel",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "excel",
+    "application/msword": "word",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "word",
+    "application/vnd.ms-powerpoint": "powerpoint",
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation": "powerpoint",
+    "application/pdf": "pdf"
+}
