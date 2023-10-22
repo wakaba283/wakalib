@@ -31,7 +31,7 @@ class Box:
             self,
             grant_type: Literal['JWT'] = 'JWT',
             jwt_config_filepath: str | None = None,
-        ):
+        ) -> None:
         """
         ## Summary
         Initializes the Box object and

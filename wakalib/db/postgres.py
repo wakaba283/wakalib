@@ -13,18 +13,19 @@ Typical usage example:
 """
 
 import json
-from typing import Any, Literal, NotRequired, TypedDict
+import re
+from typing import Any, Literal, TypedDict
 
 import pandas as pd
 import psycopg2
 
 from wakalib.exceptions.exception import ArgsError
+from wakalib.py.generic import NonDupulicateStringsGenerator
 
 
 class _IsExstsParamsDictionary(TypedDict):
-    key: str
-    value: list[Any]
-    how: NotRequired[Literal['AND', 'OR']]
+    target_column: str
+    values: Any | list[Any]
 
 
 class DBHandling:
@@ -35,7 +36,7 @@ class DBHandling:
             self,
             credentials_filepath: str,
             role: str
-        ):
+        ) -> None:
         """
         ## Summary
         select database and use role
@@ -77,7 +78,7 @@ class DBHandling:
     def _db_config(self):  # pylint: disable=missing-function-docstring
         return self.__db_config
 
-    def _get_connection(self) -> psycopg2.connect:
+    def _get_connection(self):
         return psycopg2.connect(
             dbname=self._db_config['name'],
             user=self._db_config['user'],
@@ -172,16 +173,21 @@ class DBHandling:
     def is_exists(
             self,
             table_name: str,
-            params: list[_IsExstsParamsDictionary],
+            params: _IsExstsParamsDictionary | list[_IsExstsParamsDictionary],
             join: Literal['AND', 'OR'] | None = None
         ) -> bool:
         """
         ## Args:
         - table_name (str):
             Name of the target table.
-        - params (list[_IsExstsParamsDictionary]):
+        - params (dict | list[dict]):
             List of dictionaries consisting of
-            "key", "value", and "how"(optional).
+            "target_column", "value", and "how"(optional).
+            e.g.
+            {
+                target_column: str,
+                values: Any | list[Any]
+            )
         - join (Literal['AND', 'OR'] | None, optional):
             If multiple "params" arguments are specified,
             they must be set.
@@ -191,37 +197,108 @@ class DBHandling:
         - bool: Returns True if the value of the specified search condition
                 exists in the table.
         """
-        if not join and len(params) > 1:
-            raise ArgsError(
-                argument_name='join',
-                add='To set multiple "params". "join" must be set.'
-            )
-        _queries: list[str] = []
-        query_params: dict[str, Any] = {'table': table_name}
-        for _dict in params:
-            _query: list[str] = []
-            if not _dict.get('how') and len(_dict['value']) > 1:
+        if isinstance(params, list):
+            if not join and len(params) > 1:
                 raise ArgsError(
-                    argument_name='params',
-                    add=(
-                        'To set multiple conditions for the same key. '
-                        f'"how" must be set. -> {_dict["key"]}'
-                    )
+                    argument_name='join',
+                    add='To set multiple "params". "join" must be set.'
                 )
-            for count, value in enumerate(_dict['value']):
-                __value_key = f"{_dict['key']}_val{count}"
-                _query.append(f"%({_dict['key']})s = %({__value_key})s")
-                query_params[__value_key] = value
-            if _dict.get('how'):
-                _query_str = f" {_dict['how']} ".join(_query)
+        if re.search(r'\W', table_name):
+            raise ArgsError(
+                argument_name='table_name',
+                add='Contains unauthorized charactes.'
+            )
+        len_params: int = 0
+        len_values: int = 0
+        if isinstance(params, list):
+            len_params = len(params)
+            for param in params:
+                if isinstance(param['values'], list):
+                    len_values += len(param['values'])
+                else:
+                    len_values += 1
+        else:
+            len_params = 1
+            if isinstance(params['values'], list):
+                len_values += len(params['values'])
             else:
-                _query_str = _query[0]
-            _queries.append(_query_str)
-        _queries_str = f' {join} '.join(_queries)
+                len_values += 1
+        random_string = NonDupulicateStringsGenerator(
+            max_generation=len_params*len_values
+        )
+        _queries: list[str] = []
+        query_params: dict[str, Any] = {}
+        if isinstance(params, list):
+            for _dict in params:
+                _query: list[str] = []
+                if isinstance(_dict['values'], list):
+                    for value in _dict['values']:
+                        if re.search(r'\W', _dict['target_column']):
+                            raise ArgsError(
+                                argument_name="params['target_column']",
+                                add='Contains unauthorized charactes.'
+                            )
+                        __value_key = next(random_string)
+                        _query.append(
+                            f"{_dict['target_column']} = %({__value_key})s"
+                        )
+                        query_params[__value_key] = value
+                    if len(_dict['values']) == 1:
+                        _query_str = _query[0]
+                    else:
+                        _query_str = ' OR '.join(_query)
+                else:
+                    if re.search(r'\W', _dict['target_column']):
+                        raise ArgsError(
+                            argument_name="params['target_column']",
+                            add='Contains unauthorized charactes.'
+                        )
+                    __value_key = next(random_string)
+                    _query_str = \
+                        f"{_dict['target_column']} = %({__value_key})s"
+                    query_params[__value_key] = _dict['values']
+                _queries.append(_query_str)
+            _queries_str = f' {join} '.join(_queries)
+        elif isinstance(params, dict):
+            _query: list[str] = []
+            if isinstance(params['values'], list):
+                for value in params['values']:
+                    if re.search(r'\W', params['target_column']):
+                        raise ArgsError(
+                            argument_name="params['target_column']",
+                            add='Contains unauthorized charactes.'
+                        )
+                    __value_key = next(random_string)
+                    _query.append(
+                        f"{params['target_column']} = %({__value_key})s"
+                    )
+                    query_params[__value_key] = value
+                if len(params['values']) == 1:
+                    _query_str = _query[0]
+                else:
+                    _query_str = ' OR '.join(_query)
+            else:
+                if re.search(r'\W', params['target_column']):
+                    raise ArgsError(
+                        argument_name="params['target_column']",
+                        add='Contains unauthorized charactes.'
+                    )
+                __value_key = next(random_string)
+                _query_str = \
+                    f"{params['target_column']} = %({__value_key})s"
+                query_params[__value_key] = params['values']
+            _queries_str = _query_str
+        else:
+            raise ArgsError(
+                argument_name='params',
+                add='Unsupported type.'
+            )
         _sql = (
-            f"SELECT EXISTS (SELECT * FROM %(table)s "
+            f"SELECT EXISTS (SELECT * FROM {table_name} "
             f"WHERE {_queries_str});"
         )
+        print(_sql)
+        print(query_params)
         res = self.select_fetchone(sql=_sql, params=query_params)
         if res is not None:
             return res[0]

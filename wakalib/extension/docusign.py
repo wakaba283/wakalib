@@ -41,7 +41,7 @@ class Docusign:
             jwt_config_filepath: str | None = None,
             jwt_credential_filepath: str | None = None,
             scopes: list[str] = ['signature'],
-        ):
+        ) -> None:
         """
         ## Args:
         - grant_type (Literal['JWT'], optional) :

@@ -8,10 +8,14 @@ class ArgsError(Exception):  # pylint: disable=missing-class-docstring
         self.add = add
     def __str__(self):
         __base_text = (
-            f'There is a problem with the argument. args: {self.argument_name}'
+            'There is a problem with the argument.\n'
+            f'args: {self.argument_name}'
         )
         if self.add:
-            return f'{__base_text} note: {self.add}'
+            return (
+                f'{__base_text}\n'
+                f'note: {self.add}'
+            )
         else:
             return __base_text
 

@@ -20,7 +20,7 @@ class EMail:
             server_type: Literal['SMTP'],
             host: str,
             port: int
-        ):
+        ) -> None:
         """
         ## Args:
         - server_type (Literal['SMTP']) :
