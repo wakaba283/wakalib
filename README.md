@@ -1,49 +1,58 @@
-# About
-## Project Name
+# wakalib
+## 🌱About
+### Project Name
 wakalib
 
-## Purpose
+### Purpose
 Extension of operatings taht are frequently used but not supported
 by official SDKs or libraries.
 
-## Document
+### Document
+https://wakalib.readthedocs.io/ja/latest/
 
-
-## Python Version
-Python3.11.6
-
-## Support Language
+### Support Language
 - English
 - Japanese
 
-## Developed by
+### Developed by
 | Name | GitHub |
 | ---- | ------ |
 | Tsubasa Wakabayashi | https://github.com/wakabayashi283 |
 
-## Collaborator
+### Collaborator
 None
 
-# LICENSE
+## 🤖Test Enviroment
+### Python Version
+Python3.11.6
+
+## ⚡️Installation
+```
+pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ wakalib
+```
+Note:
+Some of the dependent libraries are not supported by test PyPI and must be installed with the above code.
+
+## 🎓LICENSE
 MIT License  
 Check license file for details.
 
-## Used Libraries
-### Apache Software License (Apache License 2.0)
+## 📚Used Libraries
+#### Apache Software License (Apache License 2.0)
 boxsdk (https://github.com/box/box-python-sdk)  
 xhtml2pdf (https://github.com/xhtml2pdf/xhtml2pdf)
-### BSD-3-Clause
+#### BSD-3-Clause
 Flask (https://github.com/pallets/flask/)  
 pandas (https://github.com/pandas-dev/pandas)
-### LGPL
+#### LGPL
 psycopg2 (https://github.com/psycopg/psycopg2)
-### MIT License
+#### MIT License
 xlsx2html (https://github.com/Apkawa/xlsx2html)  
 docusign-esign (https://developers.docusign.com/)
 
-# Change Log
+## Change Log
 This library follows semantic versioning.
-### Labels
+#### Labels
 - Added (New feature)
 - Changed (Changes to existing feature.)
 - Deprecated (Features to be removed in tha future.)
