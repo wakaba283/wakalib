@@ -107,7 +107,6 @@ class Box:
             self,
             file_id: str,
             output_filepath: str,
-            encoding: str = 'utf-8',
         ) -> None:
         """
         ## Summary
@@ -118,10 +117,8 @@ class Box:
             he ID of the file in Box to download.
         - output_filepath (str) :
             File path of output destination, full path is more secure.
-        - encoding (str, optional) :
-            Defaults to 'utf-8'.
         """
-        with open(file=output_filepath, mode='wb', encoding=encoding) as _file:
+        with open(file=output_filepath, mode='wb') as _file:
             self.client.file(file_id).download_to(_file)
 
     def download_bytes(self, file_id: str) -> bytes:
