@@ -10,6 +10,9 @@ Typical usage example:
         role = 'piyo/piyon'
     )
     db_foo.select_fetchone(...)
+
+* Postgres and PostgreSQL are all registered trademarks of
+the PostgreSQL Community Association of Canada.
 """
 
 import json
@@ -45,7 +48,7 @@ class DBHandling:
         - credentials_filepath (str) :
             Enter the credentials filepath.
         - role (str) :
-            Enter the role you have set up. e.g. bd/bd_read
+            Enter the role you have set up. e.g. db/db_read
 
         ## Note
         The credentials file must be in a format such as

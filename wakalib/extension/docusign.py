@@ -1,5 +1,14 @@
 """
-Help with Docusign certification.
+INTRODUCTION
+I am a developer in no way affiliated with DocuSign®
+and do not guarantee that this library will work.
+This library is not endorsed or recommended by DocuSign®.
+If you have sufficient knowledge,
+it is strongly recommended to use the SDK and/or API provided by DocuSign®.
+
+SUMMARY
+Help with DocuSign® certification.
+* DocuSign® is trademarks of DocuSign, Inc.
 """
 
 import datetime

@@ -1,6 +1,17 @@
 """
-We have extended Box SDK and added some functions.
-We plan to grandually remove them form the library when similar processing is
+INTRODUCTION
+I and this library are in no way affiliated with Box, Inc.,
+and its use is not endorsed by Box, Inc.
+This library works within the scope of the functionality provided by Box, Inc.
+and is merely a simplified use of the functionality provided.
+If you have sufficient knowledge,
+it is strongly recommended to use the SDK provided by Box, Inc.
+* Box ® is a registered trademark of Box, Inc., and/or its affiliates
+  in the United States and other countries
+
+SUMMARY
+I have extended Box SDK and added some functions.
+I plan to grandually remove them form the library when similar processing is
 supported by Box SDK
 
 Typical usage example:
