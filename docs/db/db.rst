@@ -7,9 +7,9 @@ Welcome to wakalib's documentation!
 ===================================
 
 .. toctree::
+   postgres.md
    :maxdepth: 2
    :caption: Contents:
-   postgres.md
 
 
 
