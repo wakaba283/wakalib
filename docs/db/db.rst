@@ -3,15 +3,19 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to wakalib's documentation!
-===================================
+Documentation for DB subpackage
+-------------------------------
+Support for DB operations.
+Please select the module to import according to the DB type.
+Details of each can be found at the following links.
 
 .. toctree::
-   postgres.md
+   postgres/postgres.md
    :maxdepth: 2
    :caption: Contents:
 
-
+\* Postgres and PostgreSQL are all registered trademarks of
+the PostgreSQL Community Association of Canada.
 
 Indices and tables
 ==================
