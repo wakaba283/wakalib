@@ -8,7 +8,7 @@ Welcome to wakalib's documentation!
 
 .. toctree::
    db/db.rst
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
 
 

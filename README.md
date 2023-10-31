@@ -43,12 +43,16 @@ boxsdk (https://github.com/box/box-python-sdk)
 xhtml2pdf (https://github.com/xhtml2pdf/xhtml2pdf)
 #### BSD-3-Clause
 Flask (https://github.com/pallets/flask/)  
-pandas (https://github.com/pandas-dev/pandas)
+pandas (https://github.com/pandas-dev/pandas)  
+reportlab (https://github.com/mattjmorrison/ReportLab)
 #### LGPL
 psycopg2 (https://github.com/psycopg/psycopg2)
 #### MIT License
 xlsx2html (https://github.com/Apkawa/xlsx2html)  
 docusign-esign (https://developers.docusign.com/)
+#### Other
+PyPDF2 (https://github.com/py-pdf/pypdf)
+
 
 ## Change Log
 This library follows semantic versioning.
@@ -68,3 +72,4 @@ This library follows semantic versioning.
 | 0.0.3 | Fixed | The method of describing the return value has been corrected to solve the problem of being displaed as "Code is unreachable." by Pylance.<br>e.g.<br>old: def Function() -> NoReturn<br>new: def Function() -> None | October 20, 2023 |
 | 0.1.0 | Added | A function has been added to pass a temporary folder as the first argument when used as a decorator. | October 20, 2023 |
 | 0.1.0a4 | **Added** | I developed a module to generate random strings.<br>I have also optimized and tested parts of db/postgres.<br>I made it clear that this is a pre-alpha version of versioning. | October 22, 2023 |
+| 0.2.0.a1 | Added | The following functions have been added for PDF file operations.<br> - 
