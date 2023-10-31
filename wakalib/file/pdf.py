@@ -6,27 +6,23 @@ It uses the following libraries
 Typical usage example:
 """
 import os
-from typing import TypedDict
-from collections.abc import Iterable
-from xhtml2pdf import pisa
-import os
 from collections.abc import Iterable
 from io import BytesIO
 from pathlib import Path
 from typing import Literal, TypedDict, Union
 
 from PyPDF2 import PdfReader, PdfWriter
-from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
-from wakalib.file.handler import get_file_type
-from wakalib.exceptions.exception import (
-    ArgsError,
-    FailedToConvert,
+from xhtml2pdf import pisa
+
+from wakalib.exceptions.exception import (ArgsError, FailedToConvert,
                                           FilePathDoesNotExists,
                                           FilePathIsNotFile)
+from wakalib.file.handler import get_file_type
+
 
 class _InsertTextDict(TypedDict):
     text: str
@@ -36,7 +32,7 @@ class _InsertTextDict(TypedDict):
     color_rgb: tuple[int, int, int]
 
 
-def insert_text_into_pdf(
+def insert_text_into_pdf(  # pylint: disable=too-many-arguments, too-many-locals, too-many-branches
         file_path: str,
         params: Iterable[_InsertTextDict],
         page_size: tuple[float, float] = A4,
@@ -52,8 +48,10 @@ def insert_text_into_pdf(
     ) -> str:
     """
     ## Summary
-    Appends any specified characters to the passed PDF file path and returns the path to the output PDF.
-    The output PDF will be generated in the same directory as the specified path.
+    Appends any specified characters to the passed PDF file path
+    and returns the path to the output PDF.
+    The output PDF will be generated in the same directory
+    as the specified path.
 
     ## Args:
     - file_path (str):
@@ -69,23 +67,29 @@ def insert_text_into_pdf(
             'color_rgb': (tuple[int, int, int]) Font color. RGB.
         }
     - page_size (tuple[float, float], optional):
-        The size of the PDF to be read is described by a tuple containing two float types.
+        The size of the PDF to be read is described
+        by a tuple containing two float types.
         This is used for the position of the text, etc.. Defaults to A4.
-    - starting_point (Literal['top-left', 'bottom-left', 'top-right', 'bottom-right', optional):
-        Select the corner that will be the starting point for the position of the text to be inserted.
+    - starting_point (Literal['top-left', 'bottom-left',
+                              'top-right', 'bottom-right', optional):
+        Select the corner that will be the starting point
+        for the position of the text to be inserted.
         Defaults to 'bottom-left'.
     - font (Union[str, Path], optional):
         If the font is included in reportlab, it can be specified by letter.
-        Fonts not included in reportlab can be specified by specifying the file path.
+        Fonts not included in reportlab can be specified
+        by specifying the file path.
         Defaults to 'Helvetica'.
     - target_pages (Union[int, Literal['all']], optional):
         Page to insert text, starting with 0. Defaults to 'all'.
     - output_suffix (Union[str, None], optional):
-        Suffix of the output file; if not specified, the first text of params is set.
+        Suffix of the output file; if not specified,
+        the first text of params is set.
 
     ## Returns:
     - str:
-        Path of the output file. Generated in the same directory as the specified file.
+        Path of the output file. Generated in the same directory
+        as the specified file.
     """
     if not get_file_type(filepath=file_path) == 'pdf':
         raise ArgsError(
@@ -94,8 +98,8 @@ def insert_text_into_pdf(
         )
     if not output_suffix:
         output_suffix: str = f"({params[0]['text']})"
-    buffer = BytesIO()
-    _pdf = canvas.Canvas(filename=buffer, pagesize=A4)
+    _buffer = BytesIO()
+    _pdf = canvas.Canvas(filename=_buffer, pagesize=A4)
     if os.path.isfile(path=font):
         pdfmetrics.registerFont(
             font=TTFont(name='User Font', filename=font)
@@ -134,8 +138,8 @@ def insert_text_into_pdf(
             )
     _pdf.showPage()
     _pdf.save()
-    buffer.seek(0)
-    _pdf = PdfReader(stream=buffer)
+    _buffer.seek(0)
+    _pdf = PdfReader(stream=_buffer)
     target_pdf = PdfReader(
         stream=file_path,
         strict=False
