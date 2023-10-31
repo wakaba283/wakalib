@@ -1,14 +1,14 @@
 ## select_fetchone
 #### Args
-- sql (str)  
+- **sql** (str)  
     Any SQL. select statement.
 
-- params (dict, optional)  
+- **params** (dict) *optional  
     If you need to embed a variable, make the embedded value and
     the variable a dictionary type.
 
 ## Returns:
-- tuple: Search results are returned as a tuple.
+- **(tuple)**: Search results are returned as a tuple.
 
 ## Example
 ```python

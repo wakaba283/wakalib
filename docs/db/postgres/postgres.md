@@ -30,17 +30,17 @@ This is the main class of this module.
 It is instantiated by passing the following arguments.
 
 #### Args
-- credentials_filepath (str)  
+- **credentials_filepath** (str)  
     Path to the JSON file created above.
 
-- role (str)  
+- **role** (str)  
     The KEY you defined in the JSON you created above.
 
 #### Attribute
-- role (str)  
+- **role** (str)  
 KEY passed when instantiated.
 
-- _db_config (dict)  
+- **_db_config** (dict)  
 Converts JSON passed at instantiation into dict and returns it.
 
 #### Example
@@ -56,7 +56,7 @@ print(my_db.role)
 
 ## Methods
 ```{toctree}
-:maxdepth: 2
+:maxdepth: 1
 :caption: Contents:
 select_fetchone
 ```
