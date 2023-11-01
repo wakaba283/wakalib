@@ -24,7 +24,7 @@ setup(
         'This is an experimental library thet extends the functionally of a '
         'group of Python libraries. Check the GitHub page for details.'
     ),
-    long_description=(pathlib.Path(__file__).parent / 'README.md').read_text(),
+    long_description=(pathlib.Path(__file__).parent / 'README.md').read_text(encoding='utf-8'),
     long_description_content_type='text/markdown',
     packages=find_namespace_packages(include=['wakalib.*']),
     include_package_data=True,
