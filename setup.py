@@ -11,7 +11,7 @@ install_requires = [
     'openpyxl==3.1.2',
     'pandas==2.1.1',
     'psycopg2-binary==2.9.9',
-    'PyPDF2-3.0.1',
+    'PyPDF2==3.0.1',
     'reportlab==3.6.13',
     'xhtml2pdf==0.2.11',
     'xlsx2html==0.4.4',
