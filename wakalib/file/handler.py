@@ -28,7 +28,7 @@ def get_file_type(
     - str: "excel", "word", "powerpoint", "pdf" or "unknown"
     """
     _json_mimetypes_path = \
-        os.path.join(os.path.dirname(__file__), r'resource\mimetypes.json')
+        os.path.join(os.path.dirname(__file__), 'resource/mimetypes.json')
     with open(file=_json_mimetypes_path, mode='rt', encoding='utf-8') as file_:
         dict_mimetypes = json.load(file_)
     guess_mimetype = mimetypes.guess_type(filepath)[0]

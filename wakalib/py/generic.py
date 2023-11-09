@@ -1,8 +1,13 @@
 """
 This is a module to extend the functionality of Python.
 """
+import datetime
+import json
+import os
 import random
+import re
 import string
+from typing import Any, TypedDict, Union
 
 from wakalib.exceptions.exception import ArgsError
 
@@ -130,3 +135,65 @@ class NonDupulicateStringsGenerator:
         return ''.join(
             [random.choice(string.ascii_letters) for _ in range(string_length)]
         )
+
+
+class _DictSub(TypedDict):
+    pattern: str
+    replace: str
+
+
+class _DictFormat(TypedDict):
+    pattern: str
+    format: str
+    sub: Union[_DictSub, None]
+
+
+def str_to_datetime(
+        str_datetime: str, _error: Any = True
+    ) -> datetime.datetime | Any:
+    """
+    ## Summary
+    Convert string to date type.
+    Assumed string patterns can be added to resource/pattern.json as needed.
+
+    ## Args:
+    - str_datetime (str):
+        datetime-like string
+    - _error (Any, optional):
+        Sets the behavior if the string does not match
+        the expected string pattern.
+        The default is True, in which case an exception is raised.
+        To return an arbitrary value without causing harm, set here.
+
+    ## Raises:
+    - ValueError:
+        If _error is not set, or if True is set, this exception will be raised.
+
+    ## Returns:
+    - datetime.datetime | Any:
+        If a converted datetime or _error is set, that value is returned.
+    """
+    _json_path = \
+        os.path.join(os.path.dirname(__file__), r'resource/pattern.json')
+    with open(file=_json_path, mode='rt', encoding='utf-8') as file_:
+        dict_pattern: dict[str, _DictFormat] = json.load(file_)
+    for _dict_format in dict_pattern.values():
+        if re.fullmatch(pattern=_dict_format['pattern'], string=str_datetime):
+            if not _dict_format['sub']:
+                return datetime.datetime.strptime(
+                    str_datetime,
+                    _dict_format['format']
+                )
+            return datetime.datetime.strptime(
+                re.sub(
+                    pattern=_dict_format['sub']['pattern'],
+                    repl=_dict_format['sub']['replace'],
+                    string=str_datetime
+                ),
+                _dict_format['format']
+            )
+    if not isinstance(_error, bool):
+        return _error
+    if _error is not True:
+        return datetime.datetime(year=2000, month=1, day=1)
+    raise ValueError('String will not match any pattern.')
