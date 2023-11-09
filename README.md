@@ -72,4 +72,5 @@ This library follows semantic versioning.
 | 0.0.3 | Fixed | The method of describing the return value has been corrected to solve the problem of being displaed as "Code is unreachable." by Pylance.<br>e.g.<br>old: def Function() -> NoReturn<br>new: def Function() -> None | October 20, 2023 |
 | 0.1.0 | Added | A function has been added to pass a temporary folder as the first argument when used as a decorator. | October 20, 2023 |
 | 0.1.0a4 | **Added** | I developed a module to generate random strings.<br>I have also optimized and tested parts of db/postgres.<br>I made it clear that this is a pre-alpha version of versioning. | October 22, 2023 |
-| 0.2.0.a1 | Added | The following functions have been added for PDF file operations.<br> - 
+| 0.2.0a1 | Added | The following functions have been added for PDF file operations.<br> - insert_text_into_pdf | October 31, 2023 |
+| 0.3.0a1 | Added | Added function to convert string to date type. | November 9, 2023 |

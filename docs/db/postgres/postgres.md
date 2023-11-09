@@ -56,7 +56,6 @@ print(my_db.role)
 
 ## Methods
 ```{toctree}
-:maxdepth: 1
 :caption: Contents:
 select_fetchone
 ```
