@@ -74,3 +74,4 @@ This library follows semantic versioning.
 | 0.1.0a4 | **Added** | I developed a module to generate random strings.<br>I have also optimized and tested parts of db/postgres.<br>I made it clear that this is a pre-alpha version of versioning. | October 22, 2023 |
 | 0.2.0a1 | Added | The following functions have been added for PDF file operations.<br> - insert_text_into_pdf | October 31, 2023 |
 | 0.3.0a1 | Added | Added function to convert string to date type. | November 9, 2023 |
+| 0.3.0a2 | Changed | Changed str_to_datetime to be more powerful. | November 12, 2023 |

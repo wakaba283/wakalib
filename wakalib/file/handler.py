@@ -11,8 +11,8 @@ from typing import Callable, Literal
 
 
 def get_file_type(
-        filepath: str
-    ) -> Literal['excel', 'word', 'powerpoint', 'pdf', 'unknown']:
+    filepath: str,
+) -> Literal["excel", "word", "powerpoint", "pdf", "unknown"]:
     """
     ## Summary
     Return file type string.
@@ -27,14 +27,15 @@ def get_file_type(
     ## Returns:
     - str: "excel", "word", "powerpoint", "pdf" or "unknown"
     """
-    _json_mimetypes_path = \
-        os.path.join(os.path.dirname(__file__), 'resource/mimetypes.json')
-    with open(file=_json_mimetypes_path, mode='rt', encoding='utf-8') as file_:
+    _json_mimetypes_path = os.path.join(
+        os.path.dirname(__file__), "resource/mimetypes.json"
+    )
+    with open(file=_json_mimetypes_path, mode="rt", encoding="utf-8") as file_:
         dict_mimetypes = json.load(file_)
     guess_mimetype = mimetypes.guess_type(filepath)[0]
     file_type = dict_mimetypes.get(guess_mimetype)
     if not file_type:
-        file_type = 'unknown'
+        file_type = "unknown"
     return file_type
 
 
@@ -55,8 +56,10 @@ def create_folder(func: Callable):
     - func (Callable):
         Function.
     """
+
     @functools.wraps(func)
     def _wrapper(*args, **kwargs):
         with tempfile.TemporaryDirectory() as directory_path:
             return func(directory_path, *args, **kwargs)
+
     return _wrapper
