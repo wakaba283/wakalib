@@ -59,7 +59,7 @@ class EMail:
         ) -> message.EmailMessage:
         """
         ## Args:
-        - ender (str) : Email from.  ex. hogehoge@fuga.com
+        - sender (str) : Email from.  ex. hogehoge@fuga.com
         - subject (str) : Message subject.
         - body (str) : Message body.
         - body_subtype (Literal['text';, 'html'], optional) :
