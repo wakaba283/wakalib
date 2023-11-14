@@ -300,8 +300,6 @@ class DBHandling:
             f"SELECT EXISTS (SELECT * FROM {table_name} "
             f"WHERE {_queries_str});"
         )
-        print(_sql)
-        print(query_params)
         res = self.select_fetchone(sql=_sql, params=query_params)
         if res is not None:
             return res[0]
