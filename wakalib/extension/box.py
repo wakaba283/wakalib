@@ -241,8 +241,8 @@ class Box:
         """
         main_folder = self.client.folder(folder_id=output_folder_id)
         items = main_folder.get_items()
-        dict_item = {item.name: item for item in items}
-        if dict_item.get(folder_name):
+        dict_item = {item.name.lower(): item for item in items}
+        if dict_item.get(folder_name.lower()):
             item = dict_item[folder_name]
             if item.type == 'folder':
                 folder_id = item.id
