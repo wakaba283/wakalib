@@ -109,7 +109,7 @@ class Box:
         ## Returns:
         - dict: _description_
         """
-        folder_object = self.client.folder(folder_id==folder_id)
+        folder_object = self.client.folder(folder_id=folder_id)
         return folder_object._session.get(  # pylint: disable=protected-access
             url=folder_object.get_url()
         ).json()
