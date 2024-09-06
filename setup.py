@@ -19,7 +19,7 @@ install_requires = [
 
 setup(
     name="wakalib",
-    version="0.3.0a2",
+    version="0.3.0a3",
     description=(
         "This is an experimental library thet extends the functionally of a "
         "group of Python libraries. Check the GitHub page for details."
