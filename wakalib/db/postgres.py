@@ -279,7 +279,7 @@ class DBHandling:
             conn.commit()
 
     async def _make_set(self, set_: Set) -> tuple[SQL, dict[str, Any]]:
-        _key = str(set_.value)
+        _key = str(hash(str(set_.value)))
         return (
             (sql.Identifier(set_.field) + SQL(" = ") + sql.Placeholder(_key)),
             {_key: set_.value},
@@ -305,7 +305,7 @@ class DBHandling:
     async def _make_insert(
         self, set_: Set
     ) -> tuple[sql.Identifier, sql.Placeholder, dict[str, Any]]:
-        _key = str(set_.value)
+        _key = str(hash(str(set_.value)))
         return (
             sql.Identifier(set_.field),
             sql.Placeholder(_key),
