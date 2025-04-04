@@ -278,38 +278,64 @@ class DBHandling:
                     cur.execute(sql)
             conn.commit()
 
-    async def _make_set(self, set_: Set) -> tuple[SQL, dict[str, Any]]:
-        _key = str(hash(str(set_.value)))
+    async def _make_set(self, set_: Set, k: str | None = None) -> tuple[SQL, dict[str, Any]]:
+        if not k:
+            _key = str(hash(str(set_.value)))
+            return (
+                (sql.Identifier(set_.field) + SQL(" = ") + sql.Placeholder(_key)),
+                {_key: set_.value},
+            )
         return (
-            (sql.Identifier(set_.field) + SQL(" = ") + sql.Placeholder(_key)),
-            {_key: set_.value},
+            (sql.Identifier(set_.field) + SQL(" = ") + sql.Placeholder(k)),
+            {k: set_.value},
         )
 
-    async def _make_where(self, where: Where) -> tuple[SQL, dict[str, Any]]:
-        _key = str(hash(str(where.value)))
+    async def _make_where(self, where: Where, k: str | None = None) -> tuple[SQL, dict[str, Any]]:
+        if not k:
+            _key = str(hash(str(where.value)))
+            if where.operator == "in":
+                return (
+                    sql.Identifier(where.field)
+                    + SQL(" = ANY(")
+                    + sql.Placeholder(_key)
+                    + SQL(")"),
+                    {_key: list(where.value)},
+                )
+            return (
+                sql.Identifier(where.field)
+                + SQL(f" {where.operator} ")
+                + sql.Placeholder(_key),
+                {_key: where.value},
+            )
         if where.operator == "in":
             return (
                 sql.Identifier(where.field)
                 + SQL(" = ANY(")
-                + sql.Placeholder(_key)
+                + sql.Placeholder(k)
                 + SQL(")"),
-                {_key: list(where.value)},
+                {k: list(where.value)},
             )
         return (
             sql.Identifier(where.field)
             + SQL(f" {where.operator} ")
-            + sql.Placeholder(_key),
-            {_key: where.value},
+            + sql.Placeholder(k),
+            {k: where.value},
         )
 
     async def _make_insert(
-        self, set_: Set
+        self, set_: Set, k: str | None = None
     ) -> tuple[sql.Identifier, sql.Placeholder, dict[str, Any]]:
-        _key = str(hash(str(set_.value)))
+        if not k:
+            _key = str(hash(str(set_.value)))
+            return (
+                sql.Identifier(set_.field),
+                sql.Placeholder(_key),
+                {_key: set_.value},
+            )
         return (
             sql.Identifier(set_.field),
-            sql.Placeholder(_key),
-            {_key: set_.value},
+            sql.Placeholder(k),
+            {k: set_.value},
         )
 
     async def _make_sets(self, _data: Set | tuple[Set]) -> tuple[SQL, dict[str, Any]]:
@@ -318,7 +344,8 @@ class DBHandling:
             return (_sql, _param)
         _sets: list[SQL] = []
         _params: list[dict] = []
-        results = await asyncio.gather(*[self._make_set(set_) for set_ in _data])
+        nondupulicater = NonDupulicateStringsGenerator(max_generation=len(_data))
+        results = await asyncio.gather(*[self._make_set(set_, _k) for set_, _k in zip(_data, nondupulicater)])
         for _set, _param in results:
             _sets.append(_set)
             _params.append(_param)
@@ -332,7 +359,8 @@ class DBHandling:
             return (SQL("WHERE ") + _sql, _param)
         _wheres: list[SQL] = []
         _params: list[dict] = []
-        results = await asyncio.gather(*[self._make_where(where) for where in _data])
+        nondupulicater = NonDupulicateStringsGenerator(max_generation=len(_data))
+        results = await asyncio.gather(*[self._make_where(where, _k) for where, _k in zip(_data, nondupulicater)])
         for _where, _param in results:
             _wheres.append(_where)
             _params.append(_param)
@@ -350,7 +378,8 @@ class DBHandling:
         _fields: list[sql.Identifier] = []
         _placeholders: list[sql.Placeholder] = []
         _params: list[dict] = []
-        results = await asyncio.gather(*[self._make_insert(set_) for set_ in _data])
+        nondupulicater = NonDupulicateStringsGenerator(max_generation=len(_data))
+        results = await asyncio.gather(*[self._make_insert(set_, _k) for set_, _k in zip(_data, nondupulicater)])
         for _field, _placeholder, _param in results:
             _fields.append(_field)
             _placeholders.append(_placeholder)
